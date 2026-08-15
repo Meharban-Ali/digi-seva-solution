@@ -1,0 +1,12 @@
+target/
+.git/
+.gitignore
+.env
+.env.*
+*.log
+.idea/
+.vscode/
+*.iml
+Dockerfile
+.dockerignore
+README.md
