@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
-import java.time.LocalDateTime;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 
 @Service
@@ -32,12 +34,14 @@ public class OtpServiceImpl implements OtpService {
     @Override
     @Transactional
     public void generateAndSendOtp(String email) {
-        // Enforce 60s rate limit on OTP generation per email
+        Instant now = Instant.now();
+
+        // Enforce 60s rate limit on OTP generation per email using Instant
         Optional<OtpToken> latestOtp = otpTokenRepository.findTopByEmailOrderByCreatedAtDesc(email);
         if (latestOtp.isPresent()) {
-            LocalDateTime nextAllowedTime = latestOtp.get().getCreatedAt().plusSeconds(RATE_LIMIT_SECONDS);
-            if (LocalDateTime.now().isBefore(nextAllowedTime)) {
-                long secondsToWait = java.time.Duration.between(LocalDateTime.now(), nextAllowedTime).getSeconds();
+            Instant nextAllowedTime = latestOtp.get().getCreatedAt().plusSeconds(RATE_LIMIT_SECONDS);
+            if (now.isBefore(nextAllowedTime)) {
+                long secondsToWait = Duration.between(now, nextAllowedTime).getSeconds();
                 throw new OtpRateLimitException("Please wait " + secondsToWait + " seconds before requesting a new OTP.");
             }
         }
@@ -46,7 +50,7 @@ public class OtpServiceImpl implements OtpService {
         int otpInt = 100000 + secureRandom.nextInt(900000);
         String otpCode = String.valueOf(otpInt);
 
-        LocalDateTime expiresAt = LocalDateTime.now().plusMinutes(OTP_EXPIRATION_MINUTES);
+        Instant expiresAt = now.plus(OTP_EXPIRATION_MINUTES, ChronoUnit.MINUTES);
 
         OtpToken otpToken = new OtpToken(email, otpCode, expiresAt);
         otpTokenRepository.save(otpToken);
@@ -58,6 +62,8 @@ public class OtpServiceImpl implements OtpService {
     @Override
     @Transactional
     public void verifyOtp(String email, String otpCode) {
+        Instant now = Instant.now();
+
         OtpToken otpToken = otpTokenRepository.findTopByEmailAndVerifiedFalseOrderByCreatedAtDesc(email)
                 .orElseThrow(() -> new InvalidOtpException("No active OTP found for this email. Please request a new OTP."));
 
@@ -65,7 +71,7 @@ public class OtpServiceImpl implements OtpService {
             throw new InvalidOtpException("Invalid OTP code. Please check and try again.");
         }
 
-        if (LocalDateTime.now().isAfter(otpToken.getExpiresAt())) {
+        if (now.isAfter(otpToken.getExpiresAt())) {
             throw new OtpExpiredException("OTP has expired. Please request a new OTP.");
         }
 

@@ -29,5 +29,5 @@ USER appuser
 # Expose default port (Render overrides with PORT env var)
 EXPOSE 8080
 
-# Launch executable JAR with optimized G1GC and container memory limits
-ENTRYPOINT ["java", "-XX:+UseG1GC", "-XX:MaxRAMPercentage=75.0", "-Djava.security.egd=file:/dev/./urandom", "-jar", "app.jar"]
+# Launch executable JAR with UTC timezone, optimized G1GC and container memory limits
+ENTRYPOINT ["java", "-Duser.timezone=UTC", "-XX:+UseG1GC", "-XX:MaxRAMPercentage=75.0", "-Djava.security.egd=file:/dev/./urandom", "-jar", "app.jar"]

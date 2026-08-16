@@ -1,7 +1,7 @@
 package com.digisevasolution.entity;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Entity
 @Table(name = "otp_tokens")
@@ -18,18 +18,18 @@ public class OtpToken {
     private String otpCode;
 
     @Column(name = "expires_at", nullable = false)
-    private LocalDateTime expiresAt;
+    private Instant expiresAt;
 
     @Column(nullable = false)
     private boolean verified = false;
 
     @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    private Instant createdAt;
 
     public OtpToken() {
     }
 
-    public OtpToken(String email, String otpCode, LocalDateTime expiresAt) {
+    public OtpToken(String email, String otpCode, Instant expiresAt) {
         this.email = email;
         this.otpCode = otpCode;
         this.expiresAt = expiresAt;
@@ -38,7 +38,7 @@ public class OtpToken {
 
     @PrePersist
     protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
+        this.createdAt = Instant.now();
     }
 
     public Long getId() {
@@ -65,11 +65,11 @@ public class OtpToken {
         this.otpCode = otpCode;
     }
 
-    public LocalDateTime getExpiresAt() {
+    public Instant getExpiresAt() {
         return expiresAt;
     }
 
-    public void setExpiresAt(LocalDateTime expiresAt) {
+    public void setExpiresAt(Instant expiresAt) {
         this.expiresAt = expiresAt;
     }
 
@@ -81,11 +81,11 @@ public class OtpToken {
         this.verified = verified;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public Instant getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(Instant createdAt) {
         this.createdAt = createdAt;
     }
 }
