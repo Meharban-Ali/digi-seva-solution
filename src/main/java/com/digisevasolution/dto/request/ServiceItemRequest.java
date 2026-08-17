@@ -29,6 +29,8 @@ public class ServiceItemRequest {
 
     private Boolean isActive = true;
 
+    private Boolean isFeatured = false;
+
     @Min(value = 0, message = "Display order must be zero or positive")
     private Integer displayOrder = 0;
 
@@ -37,7 +39,7 @@ public class ServiceItemRequest {
 
     public ServiceItemRequest(String nameEn, String nameHi, String descriptionEn, String descriptionHi,
                               ServiceCategory category, BigDecimal price, String imageUrl,
-                              Boolean isActive, Integer displayOrder) {
+                              Boolean isActive, Boolean isFeatured, Integer displayOrder) {
         this.nameEn = nameEn;
         this.nameHi = nameHi;
         this.descriptionEn = descriptionEn;
@@ -46,6 +48,7 @@ public class ServiceItemRequest {
         this.price = price;
         this.imageUrl = imageUrl;
         this.isActive = isActive != null ? isActive : true;
+        this.isFeatured = isFeatured != null ? isFeatured : false;
         this.displayOrder = displayOrder != null ? displayOrder : 0;
     }
 
@@ -111,6 +114,14 @@ public class ServiceItemRequest {
 
     public void setIsActive(Boolean active) {
         isActive = active;
+    }
+
+    public Boolean getIsFeatured() {
+        return isFeatured;
+    }
+
+    public void setIsFeatured(Boolean featured) {
+        isFeatured = featured;
     }
 
     public Integer getDisplayOrder() {

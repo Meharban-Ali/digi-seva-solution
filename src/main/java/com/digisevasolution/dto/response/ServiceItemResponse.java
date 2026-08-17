@@ -16,6 +16,7 @@ public class ServiceItemResponse {
     private BigDecimal price;
     private String imageUrl;
     private boolean isActive;
+    private boolean isFeatured;
     private Integer displayOrder;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -25,7 +26,7 @@ public class ServiceItemResponse {
 
     public ServiceItemResponse(Long id, String nameEn, String nameHi, String descriptionEn, String descriptionHi,
                                ServiceCategory category, BigDecimal price, String imageUrl, boolean isActive,
-                               Integer displayOrder, LocalDateTime createdAt, LocalDateTime updatedAt) {
+                               boolean isFeatured, Integer displayOrder, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.nameEn = nameEn;
         this.nameHi = nameHi;
@@ -35,6 +36,7 @@ public class ServiceItemResponse {
         this.price = price;
         this.imageUrl = imageUrl;
         this.isActive = isActive;
+        this.isFeatured = isFeatured;
         this.displayOrder = displayOrder;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -110,6 +112,14 @@ public class ServiceItemResponse {
 
     public void setActive(boolean active) {
         isActive = active;
+    }
+
+    public boolean isFeatured() {
+        return isFeatured;
+    }
+
+    public void setFeatured(boolean featured) {
+        isFeatured = featured;
     }
 
     public Integer getDisplayOrder() {

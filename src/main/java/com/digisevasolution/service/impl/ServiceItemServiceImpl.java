@@ -37,6 +37,7 @@ public class ServiceItemServiceImpl implements ServiceItemService {
                 request.getPrice(),
                 request.getImageUrl(),
                 request.getIsActive() != null ? request.getIsActive() : true,
+                request.getIsFeatured() != null ? request.getIsFeatured() : false,
                 request.getDisplayOrder() != null ? request.getDisplayOrder() : 0
         );
 
@@ -59,6 +60,9 @@ public class ServiceItemServiceImpl implements ServiceItemService {
         serviceItem.setImageUrl(request.getImageUrl());
         if (request.getIsActive() != null) {
             serviceItem.setActive(request.getIsActive());
+        }
+        if (request.getIsFeatured() != null) {
+            serviceItem.setFeatured(request.getIsFeatured());
         }
         if (request.getDisplayOrder() != null) {
             serviceItem.setDisplayOrder(request.getDisplayOrder());
@@ -94,12 +98,20 @@ public class ServiceItemServiceImpl implements ServiceItemService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<PublicServiceResponse> getAllServicesPublic(String lang, ServiceCategory category) {
+    public List<PublicServiceResponse> getAllServicesPublic(String lang, ServiceCategory category, Boolean featured) {
         List<ServiceItem> services;
-        if (category != null) {
-            services = serviceItemRepository.findByIsActiveTrueAndCategoryOrderByDisplayOrderAscCreatedAtDesc(category);
+        if (Boolean.TRUE.equals(featured)) {
+            if (category != null) {
+                services = serviceItemRepository.findByIsActiveTrueAndCategoryAndIsFeaturedTrueOrderByDisplayOrderAscCreatedAtDesc(category);
+            } else {
+                services = serviceItemRepository.findByIsActiveTrueAndIsFeaturedTrueOrderByDisplayOrderAscCreatedAtDesc();
+            }
         } else {
-            services = serviceItemRepository.findByIsActiveTrueOrderByDisplayOrderAscCreatedAtDesc();
+            if (category != null) {
+                services = serviceItemRepository.findByIsActiveTrueAndCategoryOrderByDisplayOrderAscCreatedAtDesc(category);
+            } else {
+                services = serviceItemRepository.findByIsActiveTrueOrderByDisplayOrderAscCreatedAtDesc();
+            }
         }
 
         return services.stream()
@@ -127,6 +139,7 @@ public class ServiceItemServiceImpl implements ServiceItemService {
                 service.getPrice(),
                 service.getImageUrl(),
                 service.isActive(),
+                service.isFeatured(),
                 service.getDisplayOrder(),
                 service.getCreatedAt(),
                 service.getUpdatedAt()
@@ -157,6 +170,7 @@ public class ServiceItemServiceImpl implements ServiceItemService {
                 service.getCategory(),
                 service.getPrice(),
                 service.getImageUrl(),
+                service.isFeatured(),
                 service.getDisplayOrder()
         );
     }

@@ -18,6 +18,6 @@ public interface ServiceItemService {
     ServiceItemResponse getServiceByIdAdmin(Long id);
 
     // Public operations
-    List<PublicServiceResponse> getAllServicesPublic(String lang, ServiceCategory category);
+    List<PublicServiceResponse> getAllServicesPublic(String lang, ServiceCategory category, Boolean featured);
     PublicServiceResponse getServiceByIdPublic(Long id, String lang);
 }

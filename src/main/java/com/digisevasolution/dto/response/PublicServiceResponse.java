@@ -12,19 +12,21 @@ public class PublicServiceResponse {
     private ServiceCategory category;
     private BigDecimal price;
     private String imageUrl;
+    private boolean isFeatured;
     private Integer displayOrder;
 
     public PublicServiceResponse() {
     }
 
     public PublicServiceResponse(Long id, String name, String description, ServiceCategory category,
-                                 BigDecimal price, String imageUrl, Integer displayOrder) {
+                                 BigDecimal price, String imageUrl, boolean isFeatured, Integer displayOrder) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.category = category;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.isFeatured = isFeatured;
         this.displayOrder = displayOrder;
     }
 
@@ -74,6 +76,14 @@ public class PublicServiceResponse {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public boolean isFeatured() {
+        return isFeatured;
+    }
+
+    public void setFeatured(boolean featured) {
+        isFeatured = featured;
     }
 
     public Integer getDisplayOrder() {

@@ -15,5 +15,7 @@ public interface ServiceItemRepository extends JpaRepository<ServiceItem, Long> 
     Page<ServiceItem> findAll(Pageable pageable);
     List<ServiceItem> findByIsActiveTrueOrderByDisplayOrderAscCreatedAtDesc();
     List<ServiceItem> findByIsActiveTrueAndCategoryOrderByDisplayOrderAscCreatedAtDesc(ServiceCategory category);
+    List<ServiceItem> findByIsActiveTrueAndIsFeaturedTrueOrderByDisplayOrderAscCreatedAtDesc();
+    List<ServiceItem> findByIsActiveTrueAndCategoryAndIsFeaturedTrueOrderByDisplayOrderAscCreatedAtDesc(ServiceCategory category);
     Optional<ServiceItem> findByIdAndIsActiveTrue(Long id);
 }

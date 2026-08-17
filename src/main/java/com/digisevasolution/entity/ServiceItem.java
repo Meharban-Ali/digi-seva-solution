@@ -37,6 +37,9 @@ public class ServiceItem {
     @Column(name = "is_active", nullable = false)
     private boolean isActive = true;
 
+    @Column(name = "is_featured", nullable = false)
+    private boolean isFeatured = false;
+
     @Column(name = "display_order", nullable = false)
     private Integer displayOrder = 0;
 
@@ -51,7 +54,7 @@ public class ServiceItem {
 
     public ServiceItem(String nameEn, String nameHi, String descriptionEn, String descriptionHi,
                        ServiceCategory category, BigDecimal price, String imageUrl,
-                       boolean isActive, Integer displayOrder) {
+                       boolean isActive, boolean isFeatured, Integer displayOrder) {
         this.nameEn = nameEn;
         this.nameHi = nameHi;
         this.descriptionEn = descriptionEn;
@@ -60,6 +63,7 @@ public class ServiceItem {
         this.price = price;
         this.imageUrl = imageUrl;
         this.isActive = isActive;
+        this.isFeatured = isFeatured;
         this.displayOrder = displayOrder != null ? displayOrder : 0;
     }
 
@@ -145,6 +149,14 @@ public class ServiceItem {
 
     public void setActive(boolean active) {
         isActive = active;
+    }
+
+    public boolean isFeatured() {
+        return isFeatured;
+    }
+
+    public void setFeatured(boolean featured) {
+        isFeatured = featured;
     }
 
     public Integer getDisplayOrder() {

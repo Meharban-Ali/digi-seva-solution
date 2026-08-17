@@ -23,12 +23,13 @@ public class PublicServiceItemController {
     }
 
     @GetMapping
-    @Operation(summary = "Get Public Active Services", description = "Fetch all active service items with resolved single-language text (en/hi with English fallback).")
+    @Operation(summary = "Get Public Active Services", description = "Fetch all active service items with resolved single-language text (en/hi with English fallback). Optionally filter by category or featured status.")
     public ResponseEntity<ApiResponse<List<PublicServiceResponse>>> getAllServicesPublic(
             @RequestParam(required = false, defaultValue = "en") String lang,
-            @RequestParam(required = false) ServiceCategory category) {
+            @RequestParam(required = false) ServiceCategory category,
+            @RequestParam(required = false) Boolean featured) {
 
-        List<PublicServiceResponse> services = serviceItemService.getAllServicesPublic(lang, category);
+        List<PublicServiceResponse> services = serviceItemService.getAllServicesPublic(lang, category, featured);
         ApiResponse<List<PublicServiceResponse>> response = ApiResponse.success("Services fetched successfully", services);
         return ResponseEntity.ok(response);
     }
