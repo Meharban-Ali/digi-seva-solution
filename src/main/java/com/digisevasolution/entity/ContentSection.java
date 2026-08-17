@@ -4,5 +4,6 @@ public enum ContentSection {
     HOME_BANNER,
     ABOUT_US,
     ANNOUNCEMENT,
-    OFFER
+    OFFER,
+    FAQ
 }

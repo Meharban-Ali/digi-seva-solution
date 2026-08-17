@@ -89,6 +89,13 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(org.springframework.web.method.annotation.MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ApiResponse<Object>> handleTypeMismatchException(
+            org.springframework.web.method.annotation.MethodArgumentTypeMismatchException ex) {
+        ApiResponse<Object> response = ApiResponse.error("Invalid query parameter or enum value: " + ex.getValue());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ApiResponse<Object>> handleAccessDeniedException(
             AccessDeniedException ex, WebRequest request) {

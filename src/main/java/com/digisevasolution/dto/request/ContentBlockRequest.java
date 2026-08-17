@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotNull;
 
 public class ContentBlockRequest {
 
-    @NotNull(message = "Section is required (HOME_BANNER, ABOUT_US, ANNOUNCEMENT, OFFER)")
+    @NotNull(message = "Section is required (HOME_BANNER, ABOUT_US, ANNOUNCEMENT, OFFER, FAQ)")
     private ContentSection section;
 
     @NotBlank(message = "English title is required")
