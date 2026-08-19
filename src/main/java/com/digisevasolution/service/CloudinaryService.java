@@ -48,9 +48,21 @@ public class CloudinaryService {
                 default -> "image";
             };
 
+            String originalFilename = file.getOriginalFilename() != null ? file.getOriginalFilename() : "";
+            String baseName = originalFilename.contains(".")
+                    ? originalFilename.substring(0, originalFilename.lastIndexOf("."))
+                    : originalFilename;
+            String sanitizedBaseName = baseName.replaceAll("[^a-zA-Z0-9_-]", "_").toLowerCase();
+            if (sanitizedBaseName.isBlank()) {
+                sanitizedBaseName = "asset";
+            }
+            String uniquePublicId = sanitizedBaseName + "_" + UUID.randomUUID().toString().replace("-", "").substring(0, 8);
+
             Map options = ObjectUtils.asMap(
                     "folder", "digi_seva_solution",
-                    "resource_type", resourceType
+                    "public_id", uniquePublicId,
+                    "resource_type", resourceType,
+                    "overwrite", false
             );
 
             @SuppressWarnings("unchecked")
