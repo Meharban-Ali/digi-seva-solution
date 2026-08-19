@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
+import java.util.Map;
 
 @SpringBootTest
 @ActiveProfiles("dev")
@@ -16,12 +17,15 @@ public class InspectServiceItemsTest {
     @Autowired
     private ServiceItemRepository serviceItemRepository;
 
+    @Autowired
+    private org.springframework.jdbc.core.JdbcTemplate jdbcTemplate;
+
     @Test
     public void inspectServices() {
-        List<ServiceItem> services = serviceItemRepository.findAll();
-        System.out.println("=== SERVICE ITEMS IN NEON DATABASE (" + services.size() + ") ===");
-        for (ServiceItem s : services) {
-            System.out.println("ID: " + s.getId() + " | Name EN: [" + s.getNameEn() + "] | Image URL: [" + s.getImageUrl() + "]");
+        System.out.println("=== RAW SQL QUERY: SELECT id, name_en, image_url, is_featured FROM service_items ORDER BY id; ===");
+        List<Map<String, Object>> rows = jdbcTemplate.queryForList("SELECT id, name_en, image_url, is_featured FROM service_items ORDER BY id");
+        for (Map<String, Object> row : rows) {
+            System.out.println("ID: " + row.get("id") + " | Name EN: [" + row.get("name_en") + "] | Featured: [" + row.get("is_featured") + "] | Image URL: [" + row.get("image_url") + "]");
         }
     }
 }
