@@ -1,6 +1,7 @@
 package com.digisevasolution.dto.response;
 
-import com.digisevasolution.entity.ServiceCategory;
+import com.digisevasolution.entity.DeliveryMode;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -12,11 +13,21 @@ public class ServiceItemResponse {
     private String nameHi;
     private String descriptionEn;
     private String descriptionHi;
-    private ServiceCategory category;
+    private DeliveryMode deliveryMode;
+    private Long categoryId;
+    private String categoryNameEn;
+    private String categoryNameHi;
+    private String categorySlug;
+    private String categoryIcon;
     private BigDecimal price;
     private String imageUrl;
+
+    @JsonProperty("isActive")
     private boolean isActive;
+
+    @JsonProperty("isFeatured")
     private boolean isFeatured;
+
     private Integer displayOrder;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -25,14 +36,20 @@ public class ServiceItemResponse {
     }
 
     public ServiceItemResponse(Long id, String nameEn, String nameHi, String descriptionEn, String descriptionHi,
-                               ServiceCategory category, BigDecimal price, String imageUrl, boolean isActive,
+                               DeliveryMode deliveryMode, Long categoryId, String categoryNameEn, String categoryNameHi,
+                               String categorySlug, String categoryIcon, BigDecimal price, String imageUrl, boolean isActive,
                                boolean isFeatured, Integer displayOrder, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.nameEn = nameEn;
         this.nameHi = nameHi;
         this.descriptionEn = descriptionEn;
         this.descriptionHi = descriptionHi;
-        this.category = category;
+        this.deliveryMode = deliveryMode;
+        this.categoryId = categoryId;
+        this.categoryNameEn = categoryNameEn;
+        this.categoryNameHi = categoryNameHi;
+        this.categorySlug = categorySlug;
+        this.categoryIcon = categoryIcon;
         this.price = price;
         this.imageUrl = imageUrl;
         this.isActive = isActive;
@@ -82,12 +99,52 @@ public class ServiceItemResponse {
         this.descriptionHi = descriptionHi;
     }
 
-    public ServiceCategory getCategory() {
-        return category;
+    public DeliveryMode getDeliveryMode() {
+        return deliveryMode;
     }
 
-    public void setCategory(ServiceCategory category) {
-        this.category = category;
+    public void setDeliveryMode(DeliveryMode deliveryMode) {
+        this.deliveryMode = deliveryMode;
+    }
+
+    public Long getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public String getCategoryNameEn() {
+        return categoryNameEn;
+    }
+
+    public void setCategoryNameEn(String categoryNameEn) {
+        this.categoryNameEn = categoryNameEn;
+    }
+
+    public String getCategoryNameHi() {
+        return categoryNameHi;
+    }
+
+    public void setCategoryNameHi(String categoryNameHi) {
+        this.categoryNameHi = categoryNameHi;
+    }
+
+    public String getCategorySlug() {
+        return categorySlug;
+    }
+
+    public void setCategorySlug(String categorySlug) {
+        this.categorySlug = categorySlug;
+    }
+
+    public String getCategoryIcon() {
+        return categoryIcon;
+    }
+
+    public void setCategoryIcon(String categoryIcon) {
+        this.categoryIcon = categoryIcon;
     }
 
     public BigDecimal getPrice() {
@@ -110,11 +167,19 @@ public class ServiceItemResponse {
         return isActive;
     }
 
+    public boolean getIsActive() {
+        return isActive;
+    }
+
     public void setActive(boolean active) {
         isActive = active;
     }
 
     public boolean isFeatured() {
+        return isFeatured;
+    }
+
+    public boolean getIsFeatured() {
         return isFeatured;
     }
 

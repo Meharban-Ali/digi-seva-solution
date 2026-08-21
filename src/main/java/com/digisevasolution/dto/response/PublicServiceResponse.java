@@ -1,6 +1,7 @@
 package com.digisevasolution.dto.response;
 
-import com.digisevasolution.entity.ServiceCategory;
+import com.digisevasolution.entity.DeliveryMode;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.math.BigDecimal;
 
@@ -9,21 +10,33 @@ public class PublicServiceResponse {
     private Long id;
     private String name;
     private String description;
-    private ServiceCategory category;
+    private DeliveryMode deliveryMode;
+    private Long categoryId;
+    private String categoryName;
+    private String categorySlug;
+    private String categoryIcon;
     private BigDecimal price;
     private String imageUrl;
+
+    @JsonProperty("isFeatured")
     private boolean isFeatured;
+
     private Integer displayOrder;
 
     public PublicServiceResponse() {
     }
 
-    public PublicServiceResponse(Long id, String name, String description, ServiceCategory category,
+    public PublicServiceResponse(Long id, String name, String description, DeliveryMode deliveryMode,
+                                 Long categoryId, String categoryName, String categorySlug, String categoryIcon,
                                  BigDecimal price, String imageUrl, boolean isFeatured, Integer displayOrder) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.category = category;
+        this.deliveryMode = deliveryMode;
+        this.categoryId = categoryId;
+        this.categoryName = categoryName;
+        this.categorySlug = categorySlug;
+        this.categoryIcon = categoryIcon;
         this.price = price;
         this.imageUrl = imageUrl;
         this.isFeatured = isFeatured;
@@ -54,12 +67,44 @@ public class PublicServiceResponse {
         this.description = description;
     }
 
-    public ServiceCategory getCategory() {
-        return category;
+    public DeliveryMode getDeliveryMode() {
+        return deliveryMode;
     }
 
-    public void setCategory(ServiceCategory category) {
-        this.category = category;
+    public void setDeliveryMode(DeliveryMode deliveryMode) {
+        this.deliveryMode = deliveryMode;
+    }
+
+    public Long getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
+    public String getCategorySlug() {
+        return categorySlug;
+    }
+
+    public void setCategorySlug(String categorySlug) {
+        this.categorySlug = categorySlug;
+    }
+
+    public String getCategoryIcon() {
+        return categoryIcon;
+    }
+
+    public void setCategoryIcon(String categoryIcon) {
+        this.categoryIcon = categoryIcon;
     }
 
     public BigDecimal getPrice() {

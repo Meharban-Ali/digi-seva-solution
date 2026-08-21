@@ -1,6 +1,6 @@
 package com.digisevasolution.entity;
 
-public enum ServiceCategory {
+public enum DeliveryMode {
     VISIT_REQUIRED,
     ONLINE
 }

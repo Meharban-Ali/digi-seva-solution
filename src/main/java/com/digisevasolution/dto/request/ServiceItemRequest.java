@@ -1,6 +1,6 @@
 package com.digisevasolution.dto.request;
 
-import com.digisevasolution.entity.ServiceCategory;
+import com.digisevasolution.entity.DeliveryMode;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -19,8 +19,10 @@ public class ServiceItemRequest {
 
     private String descriptionHi;
 
-    @NotNull(message = "Service category is required (VISIT_REQUIRED or ONLINE)")
-    private ServiceCategory category;
+    @NotNull(message = "Service delivery mode is required (VISIT_REQUIRED or ONLINE)")
+    private DeliveryMode deliveryMode;
+
+    private Long categoryId;
 
     @PositiveOrZero(message = "Price must be zero or a positive value")
     private BigDecimal price;
@@ -38,13 +40,13 @@ public class ServiceItemRequest {
     }
 
     public ServiceItemRequest(String nameEn, String nameHi, String descriptionEn, String descriptionHi,
-                              ServiceCategory category, BigDecimal price, String imageUrl,
+                              DeliveryMode deliveryMode, BigDecimal price, String imageUrl,
                               Boolean isActive, Boolean isFeatured, Integer displayOrder) {
         this.nameEn = nameEn;
         this.nameHi = nameHi;
         this.descriptionEn = descriptionEn;
         this.descriptionHi = descriptionHi;
-        this.category = category;
+        this.deliveryMode = deliveryMode;
         this.price = price;
         this.imageUrl = imageUrl;
         this.isActive = isActive != null ? isActive : true;
@@ -84,12 +86,20 @@ public class ServiceItemRequest {
         this.descriptionHi = descriptionHi;
     }
 
-    public ServiceCategory getCategory() {
-        return category;
+    public DeliveryMode getDeliveryMode() {
+        return deliveryMode;
     }
 
-    public void setCategory(ServiceCategory category) {
-        this.category = category;
+    public void setDeliveryMode(DeliveryMode deliveryMode) {
+        this.deliveryMode = deliveryMode;
+    }
+
+    public Long getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
     }
 
     public BigDecimal getPrice() {

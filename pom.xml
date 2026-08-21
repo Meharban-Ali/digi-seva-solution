@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.4</version>
+        <version>3.3.5</version>
         <relativePath/>
     </parent>
 
@@ -24,7 +24,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring-dotenv.version>4.0.0</spring-dotenv.version>
         <jjwt.version>0.12.6</jjwt.version>
-        <cloudinary.version>1.38.0</cloudinary.version>
+        <cloudinary.version>1.39.0</cloudinary.version>
         <springdoc.version>2.6.0</springdoc.version>
     </properties>
 

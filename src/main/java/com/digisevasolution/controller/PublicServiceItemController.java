@@ -2,7 +2,7 @@ package com.digisevasolution.controller;
 
 import com.digisevasolution.dto.response.ApiResponse;
 import com.digisevasolution.dto.response.PublicServiceResponse;
-import com.digisevasolution.entity.ServiceCategory;
+import com.digisevasolution.entity.DeliveryMode;
 import com.digisevasolution.service.ServiceItemService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -23,13 +23,15 @@ public class PublicServiceItemController {
     }
 
     @GetMapping
-    @Operation(summary = "Get Public Active Services", description = "Fetch all active service items with resolved single-language text (en/hi with English fallback). Optionally filter by category or featured status.")
+    @Operation(summary = "Get Public Active Services", description = "Fetch all active service items with resolved single-language text (en/hi with English fallback). Optionally filter by category, delivery mode, or featured status.")
     public ResponseEntity<ApiResponse<List<PublicServiceResponse>>> getAllServicesPublic(
             @RequestParam(required = false, defaultValue = "en") String lang,
-            @RequestParam(required = false) ServiceCategory category,
-            @RequestParam(required = false) Boolean featured) {
+            @RequestParam(required = false) DeliveryMode mode,
+            @RequestParam(required = false) Boolean featured,
+            @RequestParam(required = false) Long categoryId,
+            @RequestParam(required = false) String category) {
 
-        List<PublicServiceResponse> services = serviceItemService.getAllServicesPublic(lang, category, featured);
+        List<PublicServiceResponse> services = serviceItemService.getAllServicesPublic(lang, mode, featured, categoryId, category);
         ApiResponse<List<PublicServiceResponse>> response = ApiResponse.success("Services fetched successfully", services);
         return ResponseEntity.ok(response);
     }

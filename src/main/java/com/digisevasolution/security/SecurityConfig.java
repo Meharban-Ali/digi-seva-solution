@@ -32,12 +32,14 @@ public class SecurityConfig {
     private static final Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
 
     private final JwtAuthFilter jwtAuthFilter;
+    private final RateLimitFilter rateLimitFilter;
 
     @Value("${app.cors.allowed-origins:http://localhost:5173,http://localhost:3000}")
     private String allowedOrigins;
 
-    public SecurityConfig(JwtAuthFilter jwtAuthFilter) {
+    public SecurityConfig(JwtAuthFilter jwtAuthFilter, RateLimitFilter rateLimitFilter) {
         this.jwtAuthFilter = jwtAuthFilter;
+        this.rateLimitFilter = rateLimitFilter;
     }
 
     @Bean
@@ -62,6 +64,7 @@ public class SecurityConfig {
             .headers(headers -> headers
                 .contentTypeOptions(contentTypeOptions -> {})
                 .frameOptions(frameOptions -> frameOptions.deny())
+                .referrerPolicy(referrer -> referrer.policy(org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN))
                 .httpStrictTransportSecurity(hsts -> hsts
                     .includeSubDomains(true)
                     .maxAgeInSeconds(31536000)
@@ -73,6 +76,7 @@ public class SecurityConfig {
                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
                 .requestMatchers("/api/admin/auth/login", "/api/admin/auth/verify-otp").permitAll()
                 .requestMatchers("/api/services/**").permitAll()
+                .requestMatchers("/api/categories/**").permitAll()
                 .requestMatchers("/api/content/**").permitAll()
                 .requestMatchers("/api/enquiries/**").permitAll()
                 .requestMatchers("/api/admin/auth/change-password").authenticated()
@@ -80,6 +84,7 @@ public class SecurityConfig {
                 .anyRequest().authenticated()
             );
 
+        http.addFilterBefore(rateLimitFilter, UsernamePasswordAuthenticationFilter.class);
         http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

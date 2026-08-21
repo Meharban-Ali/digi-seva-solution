@@ -3,7 +3,7 @@ package com.digisevasolution.service;
 import com.digisevasolution.dto.request.ServiceItemRequest;
 import com.digisevasolution.dto.response.PublicServiceResponse;
 import com.digisevasolution.dto.response.ServiceItemResponse;
-import com.digisevasolution.entity.ServiceCategory;
+import com.digisevasolution.entity.DeliveryMode;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -18,6 +18,7 @@ public interface ServiceItemService {
     ServiceItemResponse getServiceByIdAdmin(Long id);
 
     // Public operations
-    List<PublicServiceResponse> getAllServicesPublic(String lang, ServiceCategory category, Boolean featured);
+    List<PublicServiceResponse> getAllServicesPublic(String lang, DeliveryMode deliveryMode, Boolean featured);
+    List<PublicServiceResponse> getAllServicesPublic(String lang, DeliveryMode deliveryMode, Boolean featured, Long categoryId, String categorySlug);
     PublicServiceResponse getServiceByIdPublic(Long id, String lang);
 }

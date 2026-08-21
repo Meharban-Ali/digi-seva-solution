@@ -68,7 +68,15 @@ public class OtpServiceImpl implements OtpService {
                 .orElseThrow(() -> new InvalidOtpException("No active OTP found for this email. Please request a new OTP."));
 
         if (!otpToken.getOtpCode().equals(otpCode)) {
-            throw new InvalidOtpException("Invalid OTP code. Please check and try again.");
+            otpToken.incrementFailedAttempts();
+            if (otpToken.getFailedAttempts() >= 5) {
+                otpToken.setVerified(true); // Invalidate token on 5th failed attempt
+                otpTokenRepository.save(otpToken);
+                throw new InvalidOtpException("Maximum OTP verification attempts exceeded. Please request a new OTP.");
+            }
+            otpTokenRepository.save(otpToken);
+            int remaining = 5 - otpToken.getFailedAttempts();
+            throw new InvalidOtpException("Invalid OTP code. " + remaining + " attempts remaining.");
         }
 
         if (now.isAfter(otpToken.getExpiresAt())) {

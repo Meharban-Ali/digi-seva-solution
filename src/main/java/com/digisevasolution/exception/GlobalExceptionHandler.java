@@ -14,11 +14,15 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ApiResponse<Object>> handleResourceNotFoundException(
@@ -103,11 +107,19 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
     }
 
-    @ExceptionHandler({DataAccessException.class, PersistenceException.class})
+    @ExceptionHandler({org.springframework.jdbc.CannotGetJdbcConnectionException.class, org.springframework.dao.DataAccessResourceFailureException.class})
     public ResponseEntity<ApiResponse<Object>> handleDatabaseConnectionException(
             Exception ex, WebRequest request) {
+        log.error("Database Connection Failure: ", ex);
         ApiResponse<Object> response = ApiResponse.error("Database connection issue. Please try again.");
         return new ResponseEntity<>(response, HttpStatus.SERVICE_UNAVAILABLE);
+    }
+
+    @ExceptionHandler(org.springframework.web.servlet.resource.NoResourceFoundException.class)
+    public ResponseEntity<ApiResponse<Object>> handleNoResourceFoundException(
+            org.springframework.web.servlet.resource.NoResourceFoundException ex, WebRequest request) {
+        ApiResponse<Object> response = ApiResponse.error("Endpoint or resource not found: /" + ex.getResourcePath());
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(Exception.class)

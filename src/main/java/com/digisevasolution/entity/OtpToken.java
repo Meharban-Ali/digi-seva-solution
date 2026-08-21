@@ -23,6 +23,9 @@ public class OtpToken {
     @Column(nullable = false)
     private boolean verified = false;
 
+    @Column(name = "failed_attempts", nullable = false)
+    private int failedAttempts = 0;
+
     @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;
 
@@ -34,6 +37,7 @@ public class OtpToken {
         this.otpCode = otpCode;
         this.expiresAt = expiresAt;
         this.verified = false;
+        this.failedAttempts = 0;
     }
 
     @PrePersist
@@ -79,6 +83,18 @@ public class OtpToken {
 
     public void setVerified(boolean verified) {
         this.verified = verified;
+    }
+
+    public int getFailedAttempts() {
+        return failedAttempts;
+    }
+
+    public void setFailedAttempts(int failedAttempts) {
+        this.failedAttempts = failedAttempts;
+    }
+
+    public void incrementFailedAttempts() {
+        this.failedAttempts++;
     }
 
     public Instant getCreatedAt() {

@@ -5,5 +5,6 @@ public enum ContentSection {
     ABOUT_US,
     ANNOUNCEMENT,
     OFFER,
-    FAQ
+    FAQ,
+    WELCOME_POPUP
 }

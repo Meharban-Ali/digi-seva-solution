@@ -25,8 +25,12 @@ public class ServiceItem {
     private String descriptionHi;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 50)
-    private ServiceCategory category;
+    @Column(name = "delivery_mode", nullable = false, length = 50)
+    private DeliveryMode deliveryMode;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private Category category;
 
     @Column(precision = 10, scale = 2)
     private BigDecimal price;
@@ -53,13 +57,13 @@ public class ServiceItem {
     }
 
     public ServiceItem(String nameEn, String nameHi, String descriptionEn, String descriptionHi,
-                       ServiceCategory category, BigDecimal price, String imageUrl,
+                       DeliveryMode deliveryMode, BigDecimal price, String imageUrl,
                        boolean isActive, boolean isFeatured, Integer displayOrder) {
         this.nameEn = nameEn;
         this.nameHi = nameHi;
         this.descriptionEn = descriptionEn;
         this.descriptionHi = descriptionHi;
-        this.category = category;
+        this.deliveryMode = deliveryMode;
         this.price = price;
         this.imageUrl = imageUrl;
         this.isActive = isActive;
@@ -119,11 +123,19 @@ public class ServiceItem {
         this.descriptionHi = descriptionHi;
     }
 
-    public ServiceCategory getCategory() {
+    public DeliveryMode getDeliveryMode() {
+        return deliveryMode;
+    }
+
+    public void setDeliveryMode(DeliveryMode deliveryMode) {
+        this.deliveryMode = deliveryMode;
+    }
+
+    public Category getCategory() {
         return category;
     }
 
-    public void setCategory(ServiceCategory category) {
+    public void setCategory(Category category) {
         this.category = category;
     }
 
