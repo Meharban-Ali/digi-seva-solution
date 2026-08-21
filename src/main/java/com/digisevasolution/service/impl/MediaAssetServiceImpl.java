@@ -101,12 +101,13 @@ public class MediaAssetServiceImpl implements MediaAssetService {
 
     private void validateFileTypeAndSize(MultipartFile file, MediaType type, String extension) {
         long fileSize = file.getSize();
+        String contentType = file.getContentType() != null ? file.getContentType().toLowerCase() : "";
 
         switch (type) {
             case IMAGE -> {
-                if (!ALLOWED_IMAGE_EXTENSIONS.contains(extension)) {
+                if (!ALLOWED_IMAGE_EXTENSIONS.contains(extension) || (!contentType.isEmpty() && !contentType.startsWith("image/"))) {
                     throw new ApiException(HttpStatus.BAD_REQUEST,
-                            "Invalid image extension '" + extension + "'. Allowed image extensions: " + ALLOWED_IMAGE_EXTENSIONS);
+                            "Invalid image file format or MIME type. Allowed extensions: " + ALLOWED_IMAGE_EXTENSIONS);
                 }
                 if (fileSize > MAX_IMAGE_SIZE_BYTES) {
                     throw new ApiException(HttpStatus.BAD_REQUEST,
@@ -114,9 +115,9 @@ public class MediaAssetServiceImpl implements MediaAssetService {
                 }
             }
             case AUDIO -> {
-                if (!ALLOWED_AUDIO_EXTENSIONS.contains(extension)) {
+                if (!ALLOWED_AUDIO_EXTENSIONS.contains(extension) || (!contentType.isEmpty() && !contentType.startsWith("audio/"))) {
                     throw new ApiException(HttpStatus.BAD_REQUEST,
-                            "Invalid audio extension '" + extension + "'. Allowed audio extensions: " + ALLOWED_AUDIO_EXTENSIONS);
+                            "Invalid audio file format or MIME type. Allowed extensions: " + ALLOWED_AUDIO_EXTENSIONS);
                 }
                 if (fileSize > MAX_MEDIA_SIZE_BYTES) {
                     throw new ApiException(HttpStatus.BAD_REQUEST,
@@ -124,9 +125,9 @@ public class MediaAssetServiceImpl implements MediaAssetService {
                 }
             }
             case VIDEO -> {
-                if (!ALLOWED_VIDEO_EXTENSIONS.contains(extension)) {
+                if (!ALLOWED_VIDEO_EXTENSIONS.contains(extension) || (!contentType.isEmpty() && !contentType.startsWith("video/"))) {
                     throw new ApiException(HttpStatus.BAD_REQUEST,
-                            "Invalid video extension '" + extension + "'. Allowed video extensions: " + ALLOWED_VIDEO_EXTENSIONS);
+                            "Invalid video file format or MIME type. Allowed extensions: " + ALLOWED_VIDEO_EXTENSIONS);
                 }
                 if (fileSize > MAX_MEDIA_SIZE_BYTES) {
                     throw new ApiException(HttpStatus.BAD_REQUEST,

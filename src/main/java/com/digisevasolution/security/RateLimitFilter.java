@@ -46,8 +46,11 @@ public class RateLimitFilter extends OncePerRequestFilter {
 
         String path = request.getRequestURI();
 
-        // Only enforce rate limiting on sensitive authentication endpoints
-        if (path.equals("/api/admin/auth/login") || path.equals("/api/admin/auth/verify-otp")) {
+        // Enforce rate limiting on sensitive auth endpoints and public enquiry submissions
+        boolean isAuthEndpoint = path.equals("/api/admin/auth/login") || path.equals("/api/admin/auth/verify-otp");
+        boolean isEnquirySubmission = path.equals("/api/enquiries") && "POST".equalsIgnoreCase(request.getMethod());
+
+        if (isAuthEndpoint || isEnquirySubmission) {
             String clientIp = getClientIp(request);
             long now = System.currentTimeMillis();
 

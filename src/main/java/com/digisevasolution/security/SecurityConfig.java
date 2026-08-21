@@ -77,6 +77,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/admin/auth/login", "/api/admin/auth/verify-otp").permitAll()
                 .requestMatchers("/api/services/**").permitAll()
                 .requestMatchers("/api/categories/**").permitAll()
+                .requestMatchers("/api/projects/**").permitAll()
                 .requestMatchers("/api/content/**").permitAll()
                 .requestMatchers("/api/enquiries/**").permitAll()
                 .requestMatchers("/api/admin/auth/change-password").authenticated()

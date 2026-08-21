@@ -72,11 +72,6 @@ public class ResendEmailService {
             }
         } catch (Exception ex) {
             logger.error("Error sending OTP email via Resend to [{}]: {}", toEmail, ex.getMessage());
-            // Prominently log fallback OTP at WARN level so developer can log in locally even if Resend API key is invalid/unverified
-            logger.warn("=================================================================");
-            logger.warn("RESEND EMAIL DELIVY FAILED -> LOCAL CONSOLE OTP FALLBACK");
-            logger.warn("Generated OTP for [{}] is: [{}]", toEmail, otpCode);
-            logger.warn("=================================================================");
             return true;
         }
     }
