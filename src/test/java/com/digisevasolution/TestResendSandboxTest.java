@@ -1,5 +1,6 @@
 package com.digisevasolution;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.*;
 import org.springframework.web.client.HttpClientErrorException;
@@ -11,8 +12,14 @@ import java.util.Map;
 public class TestResendSandboxTest {
 
     @Test
+    @Disabled("Manual sandbox test for Resend API - requires RESEND_API_KEY environment variable")
     void testResendApiDirectly() {
-        String apiKey = "re_BP1Cjuh6_5epDSPt613gebMHmGUzm3sAK";
+        String apiKey = System.getenv("RESEND_API_KEY");
+        if (apiKey == null || apiKey.isBlank()) {
+            System.out.println("Skipping test: RESEND_API_KEY environment variable not set.");
+            return;
+        }
+
         String fromEmail = "onboarding@resend.dev";
         String toEmail = "sahanealam07860@gmail.com";
 

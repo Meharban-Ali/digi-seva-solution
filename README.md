@@ -38,7 +38,7 @@ When the backend application is running, interactively explore and test all API 
 
 - **Admin Account 1**: `pashamr303@gmail.com`
 - **Admin Account 2**: `sahanealam07860@gmail.com`
-- **Temporary Password**: `Admin@12345`
+- **Temporary Password**: 
 
 ---
 
