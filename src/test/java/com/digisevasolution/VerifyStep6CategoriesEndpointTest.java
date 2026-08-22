@@ -32,13 +32,21 @@ public class VerifyStep6CategoriesEndpointTest {
     @Autowired
     private UserDetailsService userDetailsService;
 
+    @Autowired
+    private com.digisevasolution.repository.AdminUserRepository adminUserRepository;
+
     @Test
     void testStep6VerifyCategoriesEndpoint() throws Exception {
         System.out.println("\n=======================================================");
         System.out.println("STEP 6 VERIFICATION: EXECUTING /api/admin/categories");
         System.out.println("=======================================================");
 
-        UserDetails userDetails = userDetailsService.loadUserByUsername("sahanealam07860@gmail.com");
+        String email = "pashamr303@gmail.com";
+        adminUserRepository.findByEmail(email).orElseGet(() ->
+                adminUserRepository.save(new com.digisevasolution.entity.AdminUser(email, "passhash", "Admin User"))
+        );
+
+        UserDetails userDetails = userDetailsService.loadUserByUsername(email);
         Authentication auth = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         String token = tokenProvider.generateToken(auth);
 

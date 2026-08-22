@@ -6,15 +6,22 @@ import com.digisevasolution.dto.request.VerifyOtpRequest;
 import com.digisevasolution.dto.response.AdminUserDto;
 import com.digisevasolution.dto.response.JwtAuthResponse;
 import com.digisevasolution.entity.AdminUser;
+import com.digisevasolution.entity.MediaType;
+import com.digisevasolution.exception.ApiException;
 import com.digisevasolution.exception.InvalidCredentialsException;
 import com.digisevasolution.exception.ResourceNotFoundException;
 import com.digisevasolution.repository.AdminUserRepository;
 import com.digisevasolution.service.AuthService;
+import com.digisevasolution.service.CloudinaryService;
 import com.digisevasolution.service.OtpService;
 import com.digisevasolution.util.JwtTokenProvider;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Map;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -23,15 +30,18 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final OtpService otpService;
     private final JwtTokenProvider tokenProvider;
+    private final CloudinaryService cloudinaryService;
 
     public AuthServiceImpl(AdminUserRepository adminUserRepository,
                            PasswordEncoder passwordEncoder,
                            OtpService otpService,
-                           JwtTokenProvider tokenProvider) {
+                           JwtTokenProvider tokenProvider,
+                           CloudinaryService cloudinaryService) {
         this.adminUserRepository = adminUserRepository;
         this.passwordEncoder = passwordEncoder;
         this.otpService = otpService;
         this.tokenProvider = tokenProvider;
+        this.cloudinaryService = cloudinaryService;
     }
 
     @Override
@@ -43,7 +53,7 @@ public class AuthServiceImpl implements AuthService {
             throw new InvalidCredentialsException("Invalid email or password");
         }
 
-        // Send OTP via Resend
+        // Generate 6-digit OTP and send via email
         otpService.generateAndSendOtp(adminUser.getEmail());
     }
 
@@ -64,6 +74,7 @@ public class AuthServiceImpl implements AuthService {
                 adminUser.getId(),
                 adminUser.getEmail(),
                 adminUser.getFullName(),
+                adminUser.getProfileImageUrl(),
                 adminUser.isFirstLogin()
         );
 
@@ -84,5 +95,60 @@ public class AuthServiceImpl implements AuthService {
         adminUser.setPasswordHash(passwordEncoder.encode(changePasswordRequest.getNewPassword()));
         adminUser.setFirstLogin(false);
         adminUserRepository.save(adminUser);
+    }
+
+    @Override
+    @Transactional
+    public AdminUserDto updateProfileAvatar(String currentUserEmail, MultipartFile file) {
+        if (file == null || file.isEmpty()) {
+            throw new ApiException(HttpStatus.BAD_REQUEST, "Profile image file cannot be empty");
+        }
+
+        String contentType = file.getContentType();
+        if (contentType == null || !contentType.startsWith("image/")) {
+            throw new ApiException(HttpStatus.BAD_REQUEST, "Only image files (JPEG, PNG, WebP) are allowed for profile avatar");
+        }
+
+        AdminUser adminUser = adminUserRepository.findByEmail(currentUserEmail)
+                .orElseThrow(() -> new ResourceNotFoundException("AdminUser", "email", currentUserEmail));
+
+        Map<String, Object> uploadResult = cloudinaryService.uploadFile(file, MediaType.IMAGE);
+        String imageUrl = (String) uploadResult.get("secure_url");
+
+        adminUser.setProfileImageUrl(imageUrl);
+        AdminUser saved = adminUserRepository.save(adminUser);
+
+        return new AdminUserDto(
+                saved.getId(),
+                saved.getEmail(),
+                saved.getFullName(),
+                saved.getProfileImageUrl(),
+                saved.isFirstLogin()
+        );
+    }
+
+    @Override
+    @Transactional
+    public AdminUserDto updateProfile(String currentUserEmail, String fullName, String profileImageUrl) {
+        AdminUser adminUser = adminUserRepository.findByEmail(currentUserEmail)
+                .orElseThrow(() -> new ResourceNotFoundException("AdminUser", "email", currentUserEmail));
+
+        if (fullName != null && !fullName.isBlank()) {
+            adminUser.setFullName(fullName.trim());
+        }
+
+        if (profileImageUrl != null) {
+            adminUser.setProfileImageUrl(profileImageUrl.trim());
+        }
+
+        AdminUser saved = adminUserRepository.save(adminUser);
+
+        return new AdminUserDto(
+                saved.getId(),
+                saved.getEmail(),
+                saved.getFullName(),
+                saved.getProfileImageUrl(),
+                saved.isFirstLogin()
+        );
     }
 }

@@ -20,6 +20,9 @@ public class AdminUser {
     @Column(name = "full_name", nullable = false)
     private String fullName;
 
+    @Column(name = "profile_image_url")
+    private String profileImageUrl;
+
     @Column(name = "is_first_login", nullable = false)
     private boolean isFirstLogin = true;
 
@@ -81,6 +84,14 @@ public class AdminUser {
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
+    }
+
+    public String getProfileImageUrl() {
+        return profileImageUrl;
+    }
+
+    public void setProfileImageUrl(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
     }
 
     public boolean isFirstLogin() {

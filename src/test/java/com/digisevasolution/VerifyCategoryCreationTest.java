@@ -38,6 +38,9 @@ public class VerifyCategoryCreationTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private com.digisevasolution.repository.AdminUserRepository adminUserRepository;
+
     @Test
     @Transactional
     void testCreateAdminCategoryEndpoint() throws Exception {
@@ -45,7 +48,12 @@ public class VerifyCategoryCreationTest {
         System.out.println("VERIFYING POST /api/admin/categories CREATION");
         System.out.println("=======================================================");
 
-        UserDetails userDetails = userDetailsService.loadUserByUsername("sahanealam07860@gmail.com");
+        String email = "pashamr303@gmail.com";
+        adminUserRepository.findByEmail(email).orElseGet(() ->
+                adminUserRepository.save(new com.digisevasolution.entity.AdminUser(email, "passhash", "Admin User"))
+        );
+
+        UserDetails userDetails = userDetailsService.loadUserByUsername(email);
         Authentication auth = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         String token = tokenProvider.generateToken(auth);
 

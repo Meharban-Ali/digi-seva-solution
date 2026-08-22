@@ -6,6 +6,7 @@ public class AdminUserDto {
     private Long id;
     private String email;
     private String fullName;
+    private String profileImageUrl;
 
     @JsonProperty("isFirstLogin")
     private boolean isFirstLogin;
@@ -14,9 +15,14 @@ public class AdminUserDto {
     }
 
     public AdminUserDto(Long id, String email, String fullName, boolean isFirstLogin) {
+        this(id, email, fullName, null, isFirstLogin);
+    }
+
+    public AdminUserDto(Long id, String email, String fullName, String profileImageUrl, boolean isFirstLogin) {
         this.id = id;
         this.email = email;
         this.fullName = fullName;
+        this.profileImageUrl = profileImageUrl;
         this.isFirstLogin = isFirstLogin;
     }
 
@@ -42,6 +48,14 @@ public class AdminUserDto {
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
+    }
+
+    public String getProfileImageUrl() {
+        return profileImageUrl;
+    }
+
+    public void setProfileImageUrl(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
     }
 
     @JsonProperty("isFirstLogin")
