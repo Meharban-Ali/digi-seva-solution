@@ -53,8 +53,12 @@ public class ResendEmailService {
                 </div>
                 """, otpCode);
 
+            String senderAddress = (fromEmail != null && !fromEmail.isBlank() && !fromEmail.contains("placeholder") && !fromEmail.toLowerCase().endsWith("@gmail.com"))
+                    ? fromEmail
+                    : "onboarding@resend.dev";
+
             Map<String, Object> requestBody = Map.of(
-                    "from", "Digi Seva Solution <" + fromEmail + ">",
+                    "from", "Digi Seva Solution <" + senderAddress + ">",
                     "to", List.of(toEmail),
                     "subject", "Your Admin Login OTP - Digi Seva Solution",
                     "html", htmlBody
